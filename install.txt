@@ -1,0 +1,172 @@
+手贱把系统下根目录文件给删了，迫于无奈重新安装了系统，所以之前的软件都得重新安装，（无奈），这里记录下，以备忘。
+以下软件安装如果依赖出现问题
+第一种方法：sudo apt-get -f install(表示修复安装)
+另一种方法是：缺什么以来重新安装什么依赖
+
+1.安装谷歌浏览器
+见自己的博客
+2.安装latex(供科研论文用)
+http://blog.csdn.net/miaoqiucheng/article/details/53082326
+
+查看自己电脑上的中文字体有哪些 fc-list :lang=zh  //列出所有中文字体
+                             fc-list   //列出所有字体
+安装中文字体：
+    step1：将C:/windows/fonts下你喜欢的字体拷贝到/usr/share/fonts/windows目录下（需首先创建windows目录）
+           sudo mkdir /usr/share/fonts/windows  
+    step2：然后将对应字体拷贝到该目录下（需使用管理员权限sudo执行）
+    step3: 将原文件名simsun.ttc改为ttf格式，同时更改对应的权限:
+           cd /usr/share/fonts/windows 
+  	   sudo chmod 644 *.ttf（*.TTF）
+注：之前老是出错，不知道是不是没修改权限的问题
+    step4：执行以下几条命令更新系统字体缓存：
+           cd /usr/share/fonts/windows 
+           sudo mkfontscale  
+           sudo mkfontdir  
+           sudo fc-cache   
+
+查看其版本tex --version
+附：当要卸载之前安装的版本，安装新版本时：
+sudo apt-get remove texlive 或
+sudo apt-get purge texlive*   //重要
+sudo apt-get autoremove       //重要
+sudo apt-get remove tex-common
+
+参考：https://ghou.me/2017/06/06/install-tex-live-on-linux/
+      http://forum.ubuntu.com.cn/viewtopic.php?f=35&t=331555
+      http://www.cnblogs.com/lienhua34/p/3675027.html
+      http://ju.outofmemory.cn/entry/141630
+
+（1）当安装texlive后要利用中文环境，可以利用xetex(也是大家建议使用的中文环境)
+sudo apt-get install texlive-xetex
+这样当包含\usepackage{xeCJK}和设置现有字体（已经存在的）时\setCJKmainfont{SimSun}就可以显示中文了。当然构建时也是Xelatex。
+（2）或者直接使用CJK包如果出错可能没安装中文字体包：sudo apt-get install latex-cjk-all或sudo apt-get install texlive-lang-cjk 。  构建时选择PDFLaTex
+（3）或者使用ctex包
+  
+解决pdf中文复制乱码问题。
+  下载ccmap.sty: http://lsec.cc.ac.cn/cgi-bin/viewcvs.cgi/cct/ccmap/ccmap.sty
+ 
+  复制到/usr/share/texmf/tex/latex/cmap
+  如果没有cmap新建cmap，将ccmap.sty放进文件夹中
+  sudo  texhash
+  在tex文件中\usepackage{ccmap}再编译。
+
+解决pdf下书签乱码（根据使用的编码是UTF或GBK选择）
+  https://liam0205.me/2014/11/22/latex-pdf-cjk-bookmarks/
+
+3.安装wps
+https://www.cnblogs.com/gisalameda/p/6839482.html
+4.安装ros
+  (1)见ros官网 （安装）
+  (2)最好先安装octomap(对于octomap和octomap-ros应该都一样)
+       git clone https://github.com/OctoMap/octomap
+       octovis依赖于qt4和qglviewer，所以如果你没有装这两个依赖，请安装它们：sudo apt-get install libqt4-dev qt4-qmake libqglviewer-dev
+       mkdir build
+       cd build 
+       cmake ..
+       make
+       参考：http://www.cnblogs.com/gaoxiang12/p/5041142.html   
+  (3)安装关于octomap-ros （安装）
+  sudo apt-get install ros-indigo-octomap-ros #安装octomap 
+  sudo apt-get install ros-indigo-octomap-msgs 
+  sudo apt-get install ros-indigo-octomap-server
+  octomap_rviz_plugins在rviz中加载显示octomap： 
+  sudo apt-get install ros-indigo-octomap-rviz-plugins 
+  
+  (4)安装ros-FCl   sudo apt-get install ros-indigo-fcl （安装）
+    （ros-fcl和fcl应该一样）
+
+  (5)安装FCL(flexible-collision-library) ，不知道是不是必须？？
+  https://github.com/flexible-collision-library/fcl/blob/master/INSTALL
+  他的依赖包括：
+
+    Eigen:  sudo apt install libeigen3-dev
+
+    libccd: 
+    必须添加ppa sudo add-apt-repository ppa:libccd-debs/ppa
+    然后再
+         sudo apt-get update
+         sudo apt-get install libccd-dev
+   参考：https://askubuntu.com/questions/727424/e-unable-to-locate-package-libccd-dev
+
+     octomap:
+       git clone https://github.com/OctoMap/octomap
+       octovis依赖于qt4和qglviewer，所以如果你没有装这两个依赖，请安装它们：sudo apt-get install libqt4-dev qt4-qmake libqglviewer-dev
+       mkdir build
+       cd build 
+       cmake ..
+       make
+       参考：http://www.cnblogs.com/gaoxiang12/p/5041142.html
+       安装octovis时出现错误  ,,可能因为安装了octomap-ros
+
+
+     可以不用安装，如果安装了，和ros-FCl运行时可能会出错
+     git clone http://www.github.com/flexible-collision-library/fcl
+     mkdir build
+     cd build
+     cmake ..
+     make
+     可以执行sudo make install （讲库或可执行程序拷贝到系统目录下）
+   (6)安装ros-ompl （安装）
+      见官网：http://ompl.kavrakilab.org/installation.html
+
+5. 安装视频播放器smplayer
+ sudo apt-get install smplayer 
+6. 安装网易云音乐
+官网下载deb包，然后dpkg -i安装
+依赖出现问题，安装失败。
+     
+7.安装Edraw亿图图示，代替windows下的visio画图工具
+进入http://www.edrawsoft.cn/download-edrawmax.php，下载Linux版本并进行安装
+tar -zxvf edrawmax-8-64-cn.run.tgz
+chmod +x EdrawMax-8-64.run
+sudo ./EdrawMax-8-64.run
+
+8.安装gnuplot：（画图工具）
+https://jingyan.baidu.com/article/ff42efa9da69f9c19e2202de.html
+sudo apt-get install gnuplot-x11  
+
+用gnuplot画坐标曲线
+参考
+set xlabel "times"
+set ylabel "sample times"
+plot "rrt.dat" w p pt 13 axis x1y1 t "rrt","rrtp.dat" w p pt 5 axis x1y1 t "rrtp"
+plot "rrt.dat" w lp pt 13 axis x1y1 t "RRT","rrtp.dat" w lp lc 3 pt 5 axis x1y1 t "pRRT"
+
+9 linux下的自带的截屏软件
+http://blog.csdn.net/shuaijiasanshao/article/details/51123155
+
+10. latex中转eps图片格式：
+安装sam2p sudo apt-get install sam2p
+命令：sam2p *.png *.eps  *为相应的图片名
+或者安装Imagemagik  sudo apt-get update   sudo apt-get install imagemagick
+命令：convert *.png *.eps
+参考：https://www.cnblogs.com/prettysmc/p/5477515.html
+
+批量转图：for f in *.png; do sam2p $f ${f%.*}.eps;done     
+         for f in *.png; do convert $f ${f%.*}.eps;done
+
+或这脚本实现：test.sh
+#! /bin/bash
+for format in .jpg .jpeg .bmp .png; do
+    for picture in *${format}; do
+          sam2p ${picture} ${picture%.*}.eps   //改为convert ${picture} ${picture%.*}.eps
+    done
+done
+操作步骤为：
+chmod +x ./test.sh  #使脚本具有执行权限
+进入相应文件夹
+./test.sh  #执行脚本
+
+11.安装adobe reader
+参考：https://blog.csdn.net/tao_627/article/details/24185471
+      http://www.cnblogs.com/lixiaolun/p/4334939.html
+
+
+12.安装MATLAB2016b
+参考https://blog.csdn.net/u014696921/article/details/70053059
+注意：cd /usr/local/MATLAB/R2016b/bin之后
+   这里要用Root权限启动 sudo ./matlab，否则出现“无法完成激活　因为许可证文件无法写入磁盘”的错误。
+
+13.安装pdfedit编辑pdf文档（全名master pdf editor对编辑pdf文件特别好用。）
+参考：https://blog.csdn.net/tao_627/article/details/46947495
+进入官网：https://code-industry.net/masterpdfeditor/  下载并安装
