@@ -1,0 +1,59 @@
+1. LaTeX使用titlesec宏包改变章节编号形式的方法
+https://www.cnblogs.com/Arago/p/5974181.html
+
+2. latex加载图片
+我用的是中文的xelatex中英混合编辑，添加的图片为.eps矢量图，所以先将图片格式转换为.eps格式。
+利用sam2p软件：安装sudo apt-get install sam2p
+然后就可以装换图片了，cd到你图片所在的文件夹执行命令：sam2p xxx.png xxx.eps
+
+当然也可以直接加载png图片
+
+第一步：包含对应的包：
+\usepackage{graphicx}
+\graphicspath{{./eps/}}   //表示eps图片所在的路径，指的是在当前路径下eps文件夹下，注意后面要加/
+\DeclareGraphicsExtensions{.eps} //表示加载的图片格式为.eps
+\DeclareGraphicsExtensions{.png} //或者表示加载的图片格式为.png   
+\usepackage[caption=false,font=footnotesize]{subfig} //实现子图
+
+
+第二步:加载图片
+\begin{figure}[H]
+\centering      
+ \subfloat[]{
+  \includegraphics[width=0.45\linewidth,height=1.8in]{rrt.eps}}      //指定图片的高和宽 
+\label{rrt}
+  \subfloat[]{
+  \includegraphics[width=0.45\linewidth,height=1.8in]{rrt2.eps}}
+\label{rrt2}
+\caption{传统的RRT路径规划效果}
+\end{figure}
+
+
+3.页面设置（页面大小和页边距）
+https://jingyan.baidu.com/article/ab0b563092c6b7c15afa7db8.html
+页面,字体大小设置：
+\documentclass[12pt,a4paper]{article}  //设置为A4纸
+页边距设置：
+\usepackage{geometry}
+\geometry{left=2.0cm,right=2.0cm,top=2.5cm,bottom=2.5cm}  //其中left, right, top, bottom的值分别代表左右上下的页边距
+
+4.如果不喜欢让Latex自动安排图片位置，可以使用float包
+\usepackage{float}
+\begin{figure}[H]   //加H实现
+
+5.Latex修改图下面的标题 Figure 1：为图
+\renewcommand{\figurename}{图}
+
+6.插入公式
+\begin{equation}
+  \begin{aligned}  //表示换行
+       加上换行符 \\
+  \end{aligned}
+\end{equation}
+
+\begin{cases}   \\表示大括号
+\end{cases}
+
+7.latex 画框图
+见自己博客（待完善）
+
