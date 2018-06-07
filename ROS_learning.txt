@@ -1,0 +1,31 @@
+一：ROS下程序运行程序
+参考：ROS官网
+     博客http://www.cnblogs.com/aobosir/p/5928596.html
+
+step1：首先创建  工作空间（Workspace）
+      1. mkdir -p ~/catkin_ws/src      在用户目录下创建文件夹catkin_ws（工作空间名）（-p 这个参数 可以允许你创建一个层级目录（带有子目录的目录）），创建之后在工作空间catkin_ws中会出现名为src的文件夹。
+      2. cd ~/catkin_ws/
+         catkin_make                编译它，会新出现一些文件(启动文件 和 编译过渡文件)，build编译后的文件，devel启动文件
+      3.添加环境变量。
+        source ~/catkin_ws/devel/setup.bash
+        或cd catkin_ws后， source ./devel/setup.bash
+我们将这个 catkin_ws 工作空间的路径添加到环境变量中，这样 ROS 和 终端可以再任意路径下使用这个catkin_ws里面的可执行文件和在任何路径都可以使用roscd 来打开这个 catkin_ws 工作空间里的程序开发包。但是，这样做，添加的环境变量只能在当前终端有效。如果重新打开新的终端，这个环境变量就没有了。
+如果要对所有的终端有用，则将catkin_ws 工作空间的路径添加到环境变量中，在bashrc中。
+        echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+        echo $ROS_PACKAGE_PATH    利用echo命令查看指定的环境变量是否添加成功。。
+
+注意：之后的程序包可以放在一个工作空间里，也就是可以省去step1。
+step2：其次创建  ros程序包（package）
+      1. cd ~/catkin_ws/src
+         catkin_create_pkg package_name std_msgs rospy roscpp    
+package_name为程序包名，一定要在src这个路径下创建，后面是依赖的程序包（rospy为python库，roscpp为c++库，注意有可能每个程序包依赖的程序包不同），创建之后，进入程序包，会出现CMakeLists.txt   include  packeage.xml  src这几个文件夹。。（当然可以利用rospack depends1 package_name查看这个程序包的一级依赖项）
+注意：要添加CMakeLists.txt的依赖项。packeage.xml等。
+
+step3：再是编译  ros程序包  
+        1. cd ~/catkin_ws/
+           catkin_make      编译整个工作空间里面的所有程序包，如果某个程序包有问题，依赖项有问题，则编译不会成功。 (节点生成了可执行文件)
+                            如果只想编译工作空间某一个程序包：catkin_make  -DCATKIN_WHITELIST_PACKAGES= "包名"
+                            例如：catkin_make  -DCATKIN_WHITELIST_PACKAGES="beginner_tutorials"
+
+       再是启动节点管理器     roscore  
+       再是启动运行节点命令   rosrun [package_name][node_name]   node_name为节点可执行文件的名字  
